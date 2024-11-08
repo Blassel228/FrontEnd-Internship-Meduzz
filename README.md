@@ -55,10 +55,9 @@ To launch this application using Docker, follow these steps:
 - Make sure you have `docker` and `docker-compose` installed by running the following commands:
   ```bash
   docker --version
-  docker-compose --version
 - Build Docker Image 
   ```
-  docker-compose build
+  docker build -t my-app .  
 - Create docker container
   ```
-  docker-compose up
+  docker run -p 3000:3000 my-app
