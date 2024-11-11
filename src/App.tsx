@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 
 const App: React.FC = () => {
-  const projectName = "My Awesome Project";
+  const projectName = "Internship";
   const greeting = "Welcome to my project!";
 
   return (
