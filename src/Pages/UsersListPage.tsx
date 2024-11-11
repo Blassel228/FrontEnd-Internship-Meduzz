@@ -1,10 +1,5 @@
 import React from 'react';
-
-const users = [
-  { id: 1, name: 'Alice', email: 'alice@example.com' },
-  { id: 2, name: 'Bob', email: 'bob@example.com' },
-  { id: 3, name: 'Charlie', email: 'charlie@example.com' },
-];
+import {users} from "../Constants/users";
 
 const UsersListPage = () => {
   return (
