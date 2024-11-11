@@ -52,13 +52,15 @@ To launch this application using Docker, follow these steps:
 ### Prerequisites
 
 - Install [Docker](https://www.docker.com/products/docker-desktop) on your machine.
-- Make sure you have `docker` and `docker-compose` installed by running the following commands:
+- Make sure you have `docker` installed by running the following commands:
   ```bash
   docker --version
-  docker-compose --version
 - Build Docker Image 
   ```
-  docker-compose build
-- Create docker container
+  docker build -t my-app:dev --target dev . (for dev)
+  docker build -t my-app:prod --target production . (for production)
+
+- Create docker container with rerun when updating the project
   ```
-  docker-compose up
+  docker run -p 3000:3000 -v .:/app my-app:dev (for dev)
+  docker run -p 3000:3000 my-app:prod (for production)
