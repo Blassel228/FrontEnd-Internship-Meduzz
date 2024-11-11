@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const UserAuthorizationPage = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('User Authorized:', credentials);
   };

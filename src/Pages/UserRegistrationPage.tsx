@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const UserRegistrationPage = () => {
   const [user, setUser] = useState({ name: '', email: '' });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     console.log('User Registered:', user);
   };
