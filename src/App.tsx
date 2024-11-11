@@ -1,18 +1,10 @@
 import React from 'react';
-import './App.css';
+import AppRoutes from "./Compponents/AppRoutes";
 
-const App: React.FC = () => {
-  const projectName = "Internship";
-  const greeting = "Welcome to my project!";
-
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>{projectName}</h1>
-        <p>{greeting}</p>
-      </header>
-    </div>
+    <AppRoutes/>
   );
-}
+};
 
 export default App;
