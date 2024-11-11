@@ -9,5 +9,5 @@ const greetingSlice  = createSlice({
   },
 });
 
-export const { setGoodbyeMessage, setGreetingMessage } = greetingSlice.actions;
+export const { setGoodbyeMessage } = greetingSlice.actions;
 export default greetingSlice.reducer;
