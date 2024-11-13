@@ -1,9 +1,9 @@
-import axiosInstance from './axiosInstance';
+import baseApi from './baseApi';
 
 
 const checkHealth = async (): Promise<boolean> => {
   try {
-    const response = await axiosInstance.get('/');
+    const response = await baseApi.get('/');
     return response.status === 200;
   } catch (error) {
     console.error('Error checking health:', error);

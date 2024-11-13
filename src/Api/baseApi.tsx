@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000',
+const baseApi = axios.create({
+  baseURL: process.env.REACT_APP_BACKEND_BASE_URL,
   withCredentials: true,
   timeout: 5000,
   headers: {
@@ -9,4 +9,4 @@ const axiosInstance = axios.create({
   },
 });
 
-export default axiosInstance;
+export default baseApi;
