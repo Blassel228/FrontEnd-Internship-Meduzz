@@ -9,20 +9,66 @@ import UserProfilePage from '../Pages/UserProfilerPage';
 import CompanyListPage from '../Pages/CompaniesListPage';
 import CompanyProfilePage from '../Pages/CompanyProfilePage';
 import WelcomePage from '../Pages/WelcomePage';
+import PrivateRoute from '../Compponents/PrivateRoute';
+import PublicRoute from '../Compponents/PublicRoute';
 
-const AppRoutes = () => (
- <Router>
-  <Routes>
-    <Route path={routerKeys.root} element={<WelcomePage />} />
-    <Route path={routerKeys.about} element={<AboutPage />} />
-    <Route path={routerKeys.register} element={<UserRegistrationPage />} />
-    <Route path={routerKeys.login} element={<UserAuthorizationPage />} />
-    <Route path={routerKeys.users} element={<UsersListPage />} />
-    <Route path={routerKeys.userProfile} element={<UserProfilePage />} />
-    <Route path={routerKeys.companies} element={<CompanyListPage />} />
-    <Route path={routerKeys.companyProfile} element={<CompanyProfilePage />} />
-  </Routes>
- </Router>
+const AppRoutes: React.FC = () => (
+  <Router>
+    <Routes>
+      <Route path={routerKeys.root} element={<WelcomePage />} />
+      <Route path={routerKeys.about} element={<AboutPage />} />
+
+      <Route
+        path={routerKeys.login}
+        element={
+          <PublicRoute>
+            <UserAuthorizationPage />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path={routerKeys.register}
+        element={
+          <PublicRoute>
+            <UserRegistrationPage />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path={routerKeys.users}
+        element={
+          <PrivateRoute>
+            <UsersListPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={routerKeys.userProfile}
+        element={
+          <PrivateRoute>
+            <UserProfilePage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={routerKeys.companies}
+        element={
+          <PrivateRoute>
+            <CompanyListPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={routerKeys.companyProfile}
+        element={
+          <PrivateRoute>
+            <CompanyProfilePage />
+          </PrivateRoute>
+        }
+      />
+    </Routes>
+  </Router>
 );
 
 export default AppRoutes;
