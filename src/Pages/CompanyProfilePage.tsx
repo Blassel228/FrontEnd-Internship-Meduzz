@@ -1,21 +1,58 @@
 import { useParams } from 'react-router-dom';
-import { companies } from '../Constants/companies';
+import baseApi from "../Api/baseApi";
+import { useEffect, useState } from "react";
 
-const CompanyProfilePage = () => {
-  const { id } = useParams();
-  const foundCompany = companies.find((company) => company.id === parseInt(id || ''));
+interface Company {
+  name: string;
+  description: string;
+}
 
-  if (!foundCompany) {
+const CompanyProfilePage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [company, setCompany] = useState<Company | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    const getCompany = async () => {
+      setLoading(true);
+      setError('');
+
+      try {
+        const response = await baseApi.get(`/company/visible/${id}`);
+        setCompany(response.data);
+      } catch (err) {
+        console.error('Error fetching company:', err);
+        setError('Failed to fetch company.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      getCompany();
+    }
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!company) {
     return <div>Company not found.</div>;
   }
 
   return (
     <div>
       <h2>Company Profile</h2>
-      <p>Name: {foundCompany.name}</p>
-      <p>Industry: {foundCompany.industry}</p>
+      <p>Name: {company.name}</p>
+      <p>Industry: {company.description}</p>
     </div>
-     );
-  };
+  );
+};
 
 export default CompanyProfilePage;
