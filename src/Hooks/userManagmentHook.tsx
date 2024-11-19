@@ -14,8 +14,8 @@ const useUserManagement = () => {
       const response = await baseApi.get(`/user/${id}`);
       dispatch(setFetchedUser({ user: response.data }));
       setError(null);
-    } catch (err) {
-      setError("Failed to fetch user data.");
+    } catch (error: any) {
+      setError(error.response?.data?.detail);
       dispatch(clearFetchedUser());
     } finally {
       setLoading(false);

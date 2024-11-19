@@ -12,6 +12,7 @@ import WelcomePage from '../Pages/WelcomePage';
 import PrivateRoute from '../Compponents/PrivateRoute';
 import PublicRoute from '../Compponents/PublicRoute';
 import UserManagementPage from "../Pages/UserManagmentPage";
+import AccountPage from "../Pages/AccountPage";
 
 const AppRoutes: React.FC = () => (
     <Router>
@@ -73,6 +74,14 @@ const AppRoutes: React.FC = () => (
             element={
               <PrivateRoute>
                 <UserManagementPage />
+              </PrivateRoute>
+            }
+             />
+             <Route
+            path={routerKeys.account}
+            element={
+              <PrivateRoute>
+                <AccountPage />
               </PrivateRoute>
             }
              />
