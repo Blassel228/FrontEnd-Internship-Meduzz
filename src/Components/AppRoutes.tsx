@@ -9,10 +9,11 @@ import UserProfilePage from '../Pages/UserProfilerPage';
 import CompanyListPage from '../Pages/CompaniesListPage';
 import CompanyProfilePage from '../Pages/CompanyProfilePage';
 import WelcomePage from '../Pages/WelcomePage';
-import PrivateRoute from '../Compponents/PrivateRoute';
-import PublicRoute from '../Compponents/PublicRoute';
+import PrivateRoute from '../Components/PrivateRoute';
+import PublicRoute from '../Components/PublicRoute';
 import UserManagementPage from "../Pages/UserManagmentPage";
 import AccountPage from "../Pages/AccountPage";
+import CompanyPage from "../Pages/CompanyPage";
 
 const AppRoutes: React.FC = () => (
     <Router>
@@ -85,6 +86,15 @@ const AppRoutes: React.FC = () => (
               </PrivateRoute>
             }
              />
+
+            <Route
+            path={routerKeys.companyRegister}
+            element={
+             <PrivateRoute>
+                <CompanyPage/>
+            </PrivateRoute>
+            }>
+            </Route>
         </Routes>
     </Router>
 );

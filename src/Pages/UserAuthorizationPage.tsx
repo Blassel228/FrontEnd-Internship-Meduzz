@@ -4,7 +4,7 @@ import { useAuth } from '../Hooks/useAuth';
 import { useAuth0 } from '@auth0/auth0-react';
 import baseApi from '../Api/baseApi';
 import { setAuthorizedUser, clearAuthorizedUser } from '../Store/slices/authorizedUserSlice';
-import LogoutButton from '../Compponents/LogoutButton';
+import LogoutButton from '../Components/LogoutButton';
 
 
 const UserAuthorizationPage = () => {
