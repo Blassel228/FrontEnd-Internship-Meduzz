@@ -1,0 +1,101 @@
+import React, { useState } from "react";
+import ModalWindow from "../Components/ModalWindow";
+import useCompany from "../Hooks/useCompany";
+
+const CompanyPage = () => {
+  const [companyId, setCompanyId] = useState<number | string>("");
+
+  const { company, setCompany, loading, error, handleUpdate, handleDelete, fetchCompany } = useCompany();
+
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
+  return (
+    <div>
+      <h1>{editMode ? "Edit Company" : "Company Details"}</h1>
+      <input
+        type="text"
+        value={companyId}
+        onChange={(e) => setCompanyId(e.target.value)}
+        placeholder="Enter Company ID"
+      />
+      <button onClick={() => fetchCompany(companyId)}>Fetch Company</button>
+
+      <button onClick={() => setModalOpen(true)}>Create Company</button>
+      {isModalOpen && <ModalWindow onClose={() => setModalOpen(false)} />}
+
+      {editMode ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (company) {
+              handleUpdate(companyId,{
+                name: company.name,
+                description: company.description,
+                visible: company.visible,
+              });
+            }
+          }}
+        >
+          <input
+            type="text"
+            value={company?.name || ""}
+            onChange={(e) =>
+              company && setCompany({ ...company, name: e.target.value })
+            }
+            placeholder="Name"
+          />
+          <textarea
+            value={company?.description || ""}
+            onChange={(e) =>
+              company && setCompany({ ...company, description: e.target.value })
+            }
+            placeholder="Description"
+          />
+          <select
+            value={company?.visible ? "true" : "false"}
+            onChange={(e) =>
+              company &&
+              setCompany({
+                ...company,
+                visible: e.target.value === "true",
+              })
+            }
+          >
+            <option value="true">Public</option>
+            <option value="false">Private</option>
+          </select>
+
+          <button type="submit">Save Changes</button>
+          <button type="button" onClick={() => setEditMode(false)}>
+            Cancel
+          </button>
+        </form>
+      ) : (
+        <div>
+          <p>
+            <strong>Name:</strong> {company?.name}
+          </p>
+          <p>
+            <strong>Description:</strong> {company?.description}
+          </p>
+          <p>
+            <strong>Visibility:</strong>{" "}
+            {company?.visible ? "Public" : !company?.visible ? "Private" : ""}
+          </p>
+
+          <button onClick={() => setEditMode(true)}>Edit</button>
+          <button onClick={() => handleDelete} style={{ color: "red" }}>
+            Delete Company
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CompanyPage;

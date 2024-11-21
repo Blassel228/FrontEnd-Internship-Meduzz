@@ -1,21 +1,40 @@
-import { useParams } from 'react-router-dom';
-import { companies } from '../Constants/companies';
+import { useEffect, useCallback } from "react";
+import useCompany from "../Hooks/useCompany";
+import { useParams } from "react-router-dom";
 
-const CompanyProfilePage = () => {
-  const { id } = useParams();
-  const foundCompany = companies.find((company) => company.id === parseInt(id || ''));
+const CompanyProfilePage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const { fetchCompany, loading, error, company } = useCompany();
 
-  if (!foundCompany) {
+  const fetchData = useCallback(() => {
+    if (id) {
+      fetchCompany(id);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!company) {
     return <div>Company not found.</div>;
   }
 
   return (
     <div>
       <h2>Company Profile</h2>
-      <p>Name: {foundCompany.name}</p>
-      <p>Industry: {foundCompany.industry}</p>
+      <p>Name: {company.name}</p>
+      <p>Description: {company.description}</p>
     </div>
-     );
-  };
+  );
+};
 
 export default CompanyProfilePage;
