@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
-import useUserManagement from "../Hooks/userManagmentHook";
+import useUserManagement from "../Hooks/userManagment";
 
 const UserManagementPage = () => {
   const { loading, error, fetchUser, updateUser, deleteUser } = useUserManagement();

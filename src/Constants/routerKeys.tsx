@@ -8,5 +8,6 @@ export const routerKeys = {
   userManage:"/manage_users",
   companies: "/companies",
   companyProfile: "/companies/:id",
+  companyRegister: "/companies/register",
   account: "/account"
 };
