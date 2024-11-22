@@ -1,31 +1,97 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import { useAuth } from '../Hooks/useAuth';
+import { useAuth0 } from '@auth0/auth0-react';
+import baseApi from '../Api/baseApi';
+import { setUser, clearUser } from '../Store/slices/userSlice';
+import LogoutButton from '../Compponents/LogoutButton';
+
 
 const UserAuthorizationPage = () => {
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const {
+    username,
+    setUsername,
+    password,
+    setPassword,
+    error,
+    loading,
+    auth0User,
+    auth0IsAuthenticated,
+    handleOrdinaryLogin,
+    handleAuth0Login,
+    handleLogout,
+  } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log('User Authorized:', credentials);
-  };
+  const {getAccessTokenSilently} = useAuth0();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: any) => state.user);
+
+  useEffect(() => {
+    const storeAuth0UserData = async () => {
+      if (auth0IsAuthenticated && auth0User) {
+        try {
+          const token = await getAccessTokenSilently();
+          localStorage.setItem('authToken', token);
+
+          const response = await baseApi.post('/token/auth0/', {}, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          dispatch(setUser({ user: response.data }));
+        } catch (err) {
+          console.error('Error integrating Auth0 user:', err);
+        }
+      } else {
+        dispatch(clearUser());
+        localStorage.removeItem('authToken');
+      }
+    };
+
+    storeAuth0UserData();
+  }, [auth0IsAuthenticated, auth0User, getAccessTokenSilently, dispatch]);
 
   return (
     <div>
+      <LogoutButton />
       <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={credentials.email}
-          onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={credentials.password}
-          onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-        />
-        <button type="submit">Login</button>
-      </form>
+      {!(auth0IsAuthenticated || user.isOrdinaryAuthenticated) ? (
+        <div>
+          <form onSubmit={handleOrdinaryLogin}>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              disabled={loading}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+            />
+            <button type="submit" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
+          </form>
+
+          <button onClick={handleAuth0Login} disabled={loading}>
+            {loading ? 'Logging in...' : 'Login with Auth0'}
+          </button>
+
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+        </div>
+      ) : (
+        <div>
+          <h3>
+            Welcome, {user.user?.username || auth0User?.name} (
+            {user?.user?.email || auth0User?.email})
+          </h3>
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      )}
     </div>
   );
 };
