@@ -10,13 +10,12 @@ const CompanyPage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-
   return (
     <div>
       <h1>{editMode ? "Edit Company" : "Company Details"}</h1>
+
+      {loading && <p>Loading...</p>}
+
       <input
         type="text"
         value={companyId}
@@ -33,7 +32,7 @@ const CompanyPage = () => {
           onSubmit={(e) => {
             e.preventDefault();
             if (company) {
-              handleUpdate(companyId,{
+              handleUpdate(companyId, {
                 name: company.name,
                 description: company.description,
                 visible: company.visible,
@@ -89,9 +88,17 @@ const CompanyPage = () => {
           </p>
 
           <button onClick={() => setEditMode(true)}>Edit</button>
-          <button onClick={() => handleDelete} style={{ color: "red" }}>
+          <button
+            onClick={() => handleDelete(companyId)}
+            style={{ color: "red" }}
+          >
             Delete Company
           </button>
+        </div>
+      )}
+         {error && (
+        <div style={{ color: "red", marginBottom: "16px" }}>
+          <p>{error}</p>
         </div>
       )}
     </div>

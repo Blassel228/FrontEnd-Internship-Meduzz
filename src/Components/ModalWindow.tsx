@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import baseApi from "../Api/baseApi";
+import useCompany from "../Hooks/useCompany";
 
 interface ModalWindowProps {
   onClose: () => void;
@@ -8,19 +8,17 @@ interface ModalWindowProps {
 const ModalWindow: React.FC<ModalWindowProps> = ({ onClose }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [visibilityMode, setVisibilityMode] = useState(true);
+  const [visible, setVisibilityMode] = useState(true);
+  const {handleCreate} = useCompany()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await baseApi.post("/company", {
-        name,
-        description,
-        visibility_mode: visibilityMode,
-      });
+      await handleCreate({ name, description, visible });
       alert("Company created successfully!");
       onClose();
     } catch (error: any) {
+      console.error("Error:", error);
       alert(error.response?.data?.detail || "An error occurred.");
     }
   };
@@ -45,7 +43,7 @@ const ModalWindow: React.FC<ModalWindowProps> = ({ onClose }) => {
             placeholder="Description"
           />
           <select
-            value={visibilityMode ? "true" : "false"}
+            value={visible ? "true" : "false"}
             onChange={(e) => setVisibilityMode(e.target.value === "true")}
           >
             <option value="true">Public</option>
@@ -59,3 +57,4 @@ const ModalWindow: React.FC<ModalWindowProps> = ({ onClose }) => {
 };
 
 export default ModalWindow;
+

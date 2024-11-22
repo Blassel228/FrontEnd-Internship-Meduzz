@@ -15,6 +15,7 @@ const useCompany = () => {
         name: response.data.name,
         description: response.data.description,
       });
+      setError('');
     } catch (error: any) {
       setError(error.response?.data?.detail || "Error fetching company details.");
     } finally {
@@ -22,11 +23,25 @@ const useCompany = () => {
     }
   };
 
-  const handleUpdate = async (companyId: number | string, updatedCompany: { name: string; description: string; visible: boolean }) => {
+  const handleUpdate = async (
+    companyId: number | string,
+    updatedCompany: { name: string; description: string; visible: boolean }
+  ) => {
     setLoading(true);
     try {
-      await baseApi.put(`/company/${companyId}`, updatedCompany);
+      const token = localStorage.getItem("authToken");
+      await baseApi.put(
+        `/company/${companyId}`,
+        updatedCompany,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setCompany(updatedCompany);
+      setError('');
     } catch (error: any) {
       setError(error.response?.data?.detail || "Error updating company details.");
     } finally {
@@ -34,11 +49,17 @@ const useCompany = () => {
     }
   };
 
-  const handleDelete = async (companyId: number | string) => {
+   const handleDelete = async (companyId: number | string) => {
     setLoading(true);
     try {
-      await baseApi.delete(`/company/${companyId}/owner`);
+      const token = localStorage.getItem("authToken");
+      await baseApi.delete(`/company/${companyId}/owner`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setCompany(null);
+      setError('');
     } catch (error: any) {
       setError(error.response?.data?.detail || "Error deleting company.");
     } finally {
@@ -46,7 +67,32 @@ const useCompany = () => {
     }
   };
 
-  return { company, loading, error, handleUpdate, handleDelete, setCompany, fetchCompany };
+  const handleCreate = async (newCompany: { name: string; description: string; visible: boolean }) => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await baseApi.post(
+        "/company",
+        newCompany,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setCompany(response.data);
+      setError('');
+      return response.data;
+    } catch (error: any) {
+      setError(error.response?.data?.detail || "Error creating company.");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { company, loading, error, handleUpdate, handleDelete, setCompany, fetchCompany, handleCreate };
 };
 
 export default useCompany;
