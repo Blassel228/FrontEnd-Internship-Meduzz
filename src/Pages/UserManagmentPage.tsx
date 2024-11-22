@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
-import useUserManagement from "../Hooks/userManagment";
+import useUser from "../Hooks/useUser";
 
 const UserManagementPage = () => {
-  const { loading, error, fetchUser, updateUser, deleteUser } = useUserManagement();
+  const { loading, error, fetchUser, updateUser, deleteUser } = useUser();
   const user = useSelector((state: RootState) => state.fetchedUser.user);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState<any | null>(null);
