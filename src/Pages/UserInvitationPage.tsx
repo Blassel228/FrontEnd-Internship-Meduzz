@@ -3,8 +3,7 @@ import useCompanyActions from "../Hooks/useCompanyActions";
 import Invitation from "../Interfaces/Invitation";
 
 const InvitationsPage = () => {
-  const { fetchInvitations, declineInvitation, acceptInvitation, loading } =
-    useCompanyActions();
+  const { fetchInvitations, declineInvitation, acceptInvitation} = useCompanyActions();
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [companyId, setCompanyId] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -49,10 +48,6 @@ const InvitationsPage = () => {
       console.error(err.response?.data?.detail || "Error declining invitation:", err);
     }
   };
-
-  if (loading) {
-    return <div>Loading invitations...</div>;
-  }
 
   return (
     <div className="invitations-page">

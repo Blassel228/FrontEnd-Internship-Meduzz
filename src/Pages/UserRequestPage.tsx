@@ -4,7 +4,7 @@ import useUser from "../Hooks/useUser";
 import { RequestGet } from "../Interfaces/Request";
 
 const UserRequestsPage = () => {
-  const { fetchUserRequests, cancelRequest, sendJoinRequest, loading, success } = useCompanyActions();
+  const { fetchUserRequests, cancelRequest, sendJoinRequest} = useCompanyActions();
   const [requests, setRequests] = useState<RequestGet[]>([]);
   const [usernames, setUsernames] = useState<Record<string, string>>({});
   const [companyId, setCompanyId] = useState<string>("");
@@ -59,10 +59,6 @@ const UserRequestsPage = () => {
     }
   };
 
-  if (loading) {
-    return <div>Loading requests...</div>;
-  }
-
   return (
     <div className="requests-page">
       <input
@@ -95,7 +91,6 @@ const UserRequestsPage = () => {
       </ul>
 
       {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
     </div>
   );
 };
