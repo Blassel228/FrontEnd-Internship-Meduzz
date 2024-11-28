@@ -8,7 +8,7 @@ const UserManagementPage = () => {
   const user = useSelector((state: RootState) => state.fetchedUser.user);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState<any | null>(null);
-  const [inputId, setInputId] = useState("");
+  const [inputId, setInputId] = useState<string>("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
