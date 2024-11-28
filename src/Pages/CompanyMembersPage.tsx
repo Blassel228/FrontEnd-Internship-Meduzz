@@ -7,9 +7,7 @@ const CompanyMembersPage = () => {
   const {
     fetchCompanyMembers,
     removeCompanyMember,
-    leaveCompany,
-    loading,
-    success,
+    leaveCompany
   } = useCompanyActions();
   const [members, setMembers] = useState<MemberGet[]>([]);
   const [usernames, setUsernames] = useState<Record<string, string>>({});
@@ -27,7 +25,7 @@ const CompanyMembersPage = () => {
       const usernamesMap: Record<string, string> = {};
       for (const member of membersData) {
         const user = await fetchUser(member.id);
-        usernamesMap[member.id] = user.username;
+         usernamesMap[member.id] = user.username;
       }
       setUsernames(usernamesMap);
     } catch (err: any) {
@@ -57,10 +55,6 @@ const CompanyMembersPage = () => {
     }
   };
 
-  if (loading) {
-    return <div>Loading members...</div>;
-  }
-
   return (
     <div className="company-members-page">
       <input
@@ -86,7 +80,6 @@ const CompanyMembersPage = () => {
       <button onClick={handleLeaveCompany}>Leave Company</button>
 
       {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
     </div>
   );
 };

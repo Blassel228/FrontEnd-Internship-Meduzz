@@ -19,6 +19,7 @@ import UserInvitationPage from "../Pages/UserInvitationPage";
 import OwnerInvitationPage from "../Pages/OwnerInvitationPage";
 import OwnerRequestPage from "../Pages/OwnerRequestPage";
 import CompanyMembersPage from "../Pages/CompanyMembersPage";
+import AdminManagmentPage from "../Pages/AdminManagmentPage";
 
 const AppRoutes: React.FC = () => (
   <Router>
@@ -133,10 +134,19 @@ const AppRoutes: React.FC = () => (
       />
 
         <Route
-        path={routerKeys.company_members}
+        path={routerKeys.companyMembers}
         element={
           <PrivateRoute>
             <CompanyMembersPage />
+          </PrivateRoute>
+        }
+      />
+
+        <Route
+        path={routerKeys.adminManagement}
+        element={
+          <PrivateRoute>
+            <AdminManagmentPage />
           </PrivateRoute>
         }
       />

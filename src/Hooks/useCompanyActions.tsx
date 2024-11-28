@@ -2,28 +2,13 @@ import { useState } from "react";
 import RequestsApi from "../Api/requestApi";
 import InvitationsApi from "../Api/invitationApi";
 import MembersApi from "../Api/membersApi";
+import AdminApi from "../Api/adminApi";  // Import AdminApi
 import RequestCreate from "../Interfaces/Request";
 import InvitationCreate from "../Interfaces/Invitation";
+import useApiCall from "./useApiCall";
 
 const useCompanyActions = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-
-  const makeApiCall = async (apiCall: () => Promise<any>, successMessage: string) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await apiCall();
-      setSuccess(successMessage);
-      return response.data;
-    } catch (err: any) {
-      setError(err.response?.data?.detail || "An error occurred.");
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { makeApiCall } = useApiCall();
 
   const declineRequest = async (requestId: string) =>
     await makeApiCall(() => RequestsApi.declineRequest(requestId), "Request declined successfully!");
@@ -70,12 +55,16 @@ const useCompanyActions = () => {
   const leaveCompany = async () =>
     await makeApiCall(() => MembersApi.leaveCompany(), "You have left the company.");
 
+  const fetchAdmins = async (companyId: string) =>
+    await makeApiCall(() => AdminApi.fetchAdmins(companyId), "Admins fetched successfully!");
+
+  const promoteToAdmin = async (companyId: string, memberId: string) =>
+    await makeApiCall(() => AdminApi.promoteToAdmin(companyId, memberId), "Member promoted to admin successfully!");
+
+  const demoteFromAdmin = async (companyId: string, memberId: string) =>
+    await makeApiCall(() => AdminApi.demoteFromAdmin(companyId, memberId), "Member demoted from admin successfully!");
+
   return {
-    loading,
-    error,
-    success,
-    setError,
-    setSuccess,
     sendInvitation,
     cancelInvitation,
     acceptRequest,
@@ -90,7 +79,10 @@ const useCompanyActions = () => {
     fetchInvitations,
     ownerFetchInvitations,
     fetchCompanyMembers,
-    ownerGetSentRequests
+    ownerGetSentRequests,
+    fetchAdmins,
+    promoteToAdmin,
+    demoteFromAdmin
   };
 };
 

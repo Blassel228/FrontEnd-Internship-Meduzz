@@ -14,5 +14,6 @@ export const routerKeys = {
   ownerInvitations: "/ownerInvitations",
   userRequests: "/userRequests",
   userInvitations: "/userInvitations",
-  company_members: "/company-members"
+  companyMembers: "/companyMembers",
+  adminManagement: "/adminManagement"
 };
