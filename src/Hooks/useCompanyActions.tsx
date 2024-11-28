@@ -1,7 +1,9 @@
 import { useState } from "react";
-import baseApi from "../Api/baseApi";
-import InvitationCreate from "../Interfaces/Invitation";
+import RequestsApi from "../Api/requestApi";
+import InvitationsApi from "../Api/invitationApi";
+import MembersApi from "../Api/membersApi";
 import RequestCreate from "../Interfaces/Request";
+import InvitationCreate from "../Interfaces/Invitation";
 
 const useCompanyActions = () => {
   const [loading, setLoading] = useState(false);
@@ -24,94 +26,49 @@ const useCompanyActions = () => {
   };
 
   const declineRequest = async (requestId: string) =>
-    await makeApiCall(
-    () => baseApi.delete(`/request/${requestId}/reject`),
-    "Request declined successfully!"
-  );
-
-  const ownerGetSentRequests = async (companyId: string)=>
-    await makeApiCall(
-    () => baseApi.get(`/request/company/${companyId}/owner/sent`),
-    "Requests fetched successfully")
+    await makeApiCall(() => RequestsApi.declineRequest(requestId), "Request declined successfully!");
 
   const acceptRequest = async (requestId: string) =>
-    await makeApiCall(
-      () => baseApi.post(`/request/${requestId}/accept`),
-      "Request accepted successfully!"
-    );
+    await makeApiCall(() => RequestsApi.acceptRequest(requestId), "Request accepted successfully!");
 
   const fetchUserRequests = async () =>
-    await makeApiCall(
-      () => baseApi.get(`/request/sent`),
-      "Join requests fetched successfully!"
-    );
+    await makeApiCall(() => RequestsApi.fetchUserRequests(), "Join requests fetched successfully!");
 
   const sendJoinRequest = async (data: RequestCreate) =>
-    await makeApiCall(
-      () => baseApi.post(`request/send`, data),
-      "Request to join sent successfully!"
-    );
+    await makeApiCall(() => RequestsApi.sendJoinRequest(data), "Request to join sent successfully!");
 
   const cancelRequest = async (requestId: string) =>
-    await makeApiCall(
-      () => baseApi.delete(`/request/${requestId}/delete`),
-      "Request canceled successfully!"
-    );
+    await makeApiCall(() => RequestsApi.cancelRequest(requestId), "Request canceled successfully!");
+
+  const ownerGetSentRequests = async (companyId: string) =>
+    await makeApiCall(() => RequestsApi.ownerGetSentRequests(companyId), "Requests fetched successfully!");
 
   const sendInvitation = async (data: InvitationCreate) =>
-    await makeApiCall(
-      () => baseApi.post(`/invitation/send`, data),
-      "Invitation sent successfully!"
-    );
+    await makeApiCall(() => InvitationsApi.sendInvitation(data), "Invitation sent successfully!");
 
   const cancelInvitation = async (invitationId: string) =>
-    await makeApiCall(
-      () => baseApi.delete(`/invitation/${invitationId}`),
-      "Invitation canceled successfully!"
-    );
+    await makeApiCall(() => InvitationsApi.cancelInvitation(invitationId), "Invitation canceled successfully!");
 
   const acceptInvitation = async (invitationId: string) =>
-    await makeApiCall(
-      () => baseApi.post(`/invitation/${invitationId}/accept`),
-      "Invitation accepted successfully!"
-    );
+    await makeApiCall(() => InvitationsApi.acceptInvitation(invitationId), "Invitation accepted successfully!");
 
   const declineInvitation = async (invitationId: string) =>
-    await makeApiCall(
-      () => baseApi.delete(`/invitation/${invitationId}/reject`),
-      "Invitation declined successfully!"
-    );
+    await makeApiCall(() => InvitationsApi.declineInvitation(invitationId), "Invitation declined successfully!");
 
   const fetchInvitations = async () =>
-    await makeApiCall(
-      () => baseApi.get(`/invitation/sent`),
-      "Invitations fetched successfully!"
-    );
+    await makeApiCall(() => InvitationsApi.fetchInvitations(), "Invitations fetched successfully!");
 
   const ownerFetchInvitations = async (companyId: string) =>
-    await makeApiCall(
-      () => baseApi.get(`/invitation/company/${companyId}/owner/sent`),
-      "Invited users fetched successfully!"
-    );
+    await makeApiCall(() => InvitationsApi.ownerFetchInvitations(companyId), "Invited users fetched successfully!");
 
   const fetchCompanyMembers = async (companyId: string) =>
-    await makeApiCall(
-      () => baseApi.get(`/members/company/${companyId}/users`),
-      "Company users fetched successfully!"
-    );
+    await makeApiCall(() => MembersApi.fetchCompanyMembers(companyId), "Company users fetched successfully!");
 
   const removeCompanyMember = async (memberId: string) =>
-    await makeApiCall(
-      () => baseApi.delete(`/members/${memberId}/fire`),
-      "User removed successfully!"
-    );
+    await makeApiCall(() => MembersApi.removeCompanyMember(memberId), "User removed successfully!");
 
-    const leaveCompany = async () =>
-    await makeApiCall(
-      () => baseApi.delete(`/members/resign`),
-      "You have left the company."
-    );
-
+  const leaveCompany = async () =>
+    await makeApiCall(() => MembersApi.leaveCompany(), "You have left the company.");
 
   return {
     loading,
