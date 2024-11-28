@@ -79,6 +79,7 @@ const useUser = () => {
       const response = await baseApi.get(`/user/${id}`);
       dispatch(setFetchedUser({ user: response.data }));
       setError(null);
+      return response.data
     } catch (error: any) {
       setError(error.response?.data?.detail || "Failed to fetch user.");
       dispatch(clearFetchedUser());

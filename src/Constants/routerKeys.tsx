@@ -9,5 +9,10 @@ export const routerKeys = {
   companies: "/companies",
   companyProfile: "/companies/:id",
   companyRegister: "/companies/register",
-  account: "/account"
+  account: "/account",
+  ownerRequests: "/ownerRequests",
+  ownerInvitations: "/ownerInvitations",
+  userRequests: "/userRequests",
+  userInvitations: "/userInvitations",
+  company_members: "/company-members"
 };
