@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import baseApi from '../Api/baseApi';
-
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+import { validateEmail, validatePassword } from '../Utils/formValidation';
 
 export const useUserRegistration = () => {
   const [user, setUser] = useState({
@@ -14,18 +13,18 @@ export const useUserRegistration = () => {
   const [success, setSuccess] = useState('');
 
   const validateInputs = () => {
-    if (!emailRegex.test(user.email)) {
-      setError('Please enter a valid email address.');
+    const emailError = validateEmail(user.email);
+    if (emailError) {
+      setError(emailError);
       return false;
     }
-    if (user.password.length < 6) {
-      setError('Password must be at least 6 characters long.');
+
+    const passwordError = validatePassword(user.password, user.confirmPassword);
+    if (passwordError) {
+      setError(passwordError);
       return false;
     }
-    if (user.password !== user.confirmPassword) {
-      setError('Passwords do not match.');
-      return false;
-    }
+
     return true;
   };
 

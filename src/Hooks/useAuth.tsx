@@ -1,20 +1,24 @@
-import { useState} from 'react';
+import { useState, FormEvent } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useDispatch } from 'react-redux';
 import { setAuthorizedUser, clearAuthorizedUser } from '../Store/slices/authorizedUserSlice';
 import baseApi from '../Api/baseApi';
 import { useNavigate } from 'react-router-dom';
+import { User } from '../Interfaces/User';
+import {removeItem, setItem} from "../Utils/localStorage";
 
 export const useAuth = () => {
-  const { loginWithRedirect, user: auth0User, isAuthenticated: auth0IsAuthenticated, logout,  } = useAuth0();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { loginWithRedirect, user: auth0User, isAuthenticated: auth0IsAuthenticated, logout } = useAuth0<User>();
 
-  const handleOrdinaryLogin = async (e: React.FormEvent) => {
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleOrdinaryLogin = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
@@ -25,7 +29,7 @@ export const useAuth = () => {
       payload.append('password', password);
 
       const loginResponse = await baseApi.post(
-        'http://localhost:8000/token/login',
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/token/login`,
         payload,
         {
           headers: {
@@ -35,7 +39,7 @@ export const useAuth = () => {
       );
 
       const token = loginResponse.data.access_token;
-      localStorage.setItem('authToken', token);
+      setItem('authToken', token);
 
       const userResponse = await baseApi.get('/token/users/me', {
         headers: { Authorization: `Bearer ${token}` },
@@ -74,7 +78,7 @@ export const useAuth = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
+    removeItem('authToken');
     dispatch(clearAuthorizedUser());
     logout({ logoutParams: { returnTo: window.location.origin } });
   };
