@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setGoodbyeMessage } from '../Store/slices/testStringSlice';
 import { RootState } from '../Store/store';
 import checkHealth from "../Api/apiEndpoints";
-import LogoutButton from "../Compponents/LogoutButton";
+import LogoutButton from "../Components/LogoutButton";
 import { useAuth0 } from '@auth0/auth0-react';
 
 const WelcomePage = () => {

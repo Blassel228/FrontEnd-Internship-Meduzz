@@ -1,7 +1,7 @@
 import { useState} from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useDispatch } from 'react-redux';
-import { setUser, clearUser } from '../Store/slices/userSlice';
+import { setAuthorizedUser, clearAuthorizedUser } from '../Store/slices/authorizedUserSlice';
 import baseApi from '../Api/baseApi';
 import { useNavigate } from 'react-router-dom';
 
@@ -42,7 +42,7 @@ export const useAuth = () => {
       });
 
       dispatch(
-        setUser({
+        setAuthorizedUser({
           user: {
             email: userResponse.data.email,
             id: userResponse.data.id,
@@ -75,7 +75,7 @@ export const useAuth = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
-    dispatch(clearUser());
+    dispatch(clearAuthorizedUser());
     logout({ logoutParams: { returnTo: window.location.origin } });
   };
 

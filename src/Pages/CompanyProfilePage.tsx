@@ -1,37 +1,19 @@
-import { useParams } from 'react-router-dom';
-import baseApi from "../Api/baseApi";
-import { useEffect, useState } from "react";
-
-interface Company {
-  name: string;
-  description: string;
-}
+import { useEffect, useCallback } from "react";
+import useCompany from "../Hooks/useCompany";
+import { useParams } from "react-router-dom";
 
 const CompanyProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [company, setCompany] = useState<Company | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
+  const { fetchCompany, loading, error, company } = useCompany();
+
+  const fetchData = useCallback(() => {
+    if (id) {
+      fetchCompany(id);
+    }
+  }, [id]);
 
   useEffect(() => {
-    const getCompany = async () => {
-      setLoading(true);
-      setError('');
-
-      try {
-        const response = await baseApi.get(`/company/visible/${id}`);
-        setCompany(response.data);
-      } catch (err) {
-        console.error('Error fetching company:', err);
-        setError('Failed to fetch company.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      getCompany();
-    }
+    fetchData();
   }, [id]);
 
   if (loading) {
@@ -50,7 +32,7 @@ const CompanyProfilePage: React.FC = () => {
     <div>
       <h2>Company Profile</h2>
       <p>Name: {company.name}</p>
-      <p>Industry: {company.description}</p>
+      <p>Description: {company.description}</p>
     </div>
   );
 };

@@ -1,38 +1,38 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useUserRegistration } from '../Hooks/useUserRegistration';
+import useUser from "../Hooks/useUser";
 
 const UserRegistrationPage = () => {
   const { loginWithRedirect } = useAuth0();
-  const { user, setUser, error, success, handleSubmit } = useUserRegistration();
+  const { registrationData, setRegistrationData, error, success, registerUser } = useUser();
 
   return (
     <div>
       <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={registerUser}>
         <input
           type="text"
           placeholder="Username"
-          value={user.username}
-          onChange={(e) => setUser({ ...user, username: e.target.value })}
+          value={registrationData.username}
+          onChange={(e) => setRegistrationData({ ...registrationData, username: e.target.value })}
         />
         <input
           type="email"
           placeholder="Email"
-          value={user.email}
-          onChange={(e) => setUser({ ...user, email: e.target.value })}
+          value={registrationData.email}
+          onChange={(e) => setRegistrationData({ ...registrationData, email: e.target.value })}
         />
         <input
           type="password"
           placeholder="Password"
-          value={user.password}
-          onChange={(e) => setUser({ ...user, password: e.target.value })}
+          value={registrationData.password}
+          onChange={(e) => setRegistrationData({ ...registrationData, password: e.target.value })}
         />
         <input
           type="password"
           placeholder="Confirm Password"
-          value={user.confirmPassword}
-          onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })}
+          value={registrationData.confirmPassword}
+          onChange={(e) => setRegistrationData({ ...registrationData, confirmPassword: e.target.value })}
         />
         {error && <p style={{ color: 'red' }}>{error}</p>}
         {success && <p style={{ color: 'green' }}>{success}</p>}

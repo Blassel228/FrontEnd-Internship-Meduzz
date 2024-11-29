@@ -3,8 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import { useAuth } from '../Hooks/useAuth';
 import { useAuth0 } from '@auth0/auth0-react';
 import baseApi from '../Api/baseApi';
-import { setUser, clearUser } from '../Store/slices/userSlice';
-import LogoutButton from '../Compponents/LogoutButton';
+import { setAuthorizedUser, clearAuthorizedUser } from '../Store/slices/authorizedUserSlice';
+import LogoutButton from '../Components/LogoutButton';
 
 
 const UserAuthorizationPage = () => {
@@ -38,12 +38,12 @@ const UserAuthorizationPage = () => {
             headers: { Authorization: `Bearer ${token}` },
           });
 
-          dispatch(setUser({ user: response.data }));
+          dispatch(setAuthorizedUser({ user: response.data }));
         } catch (err) {
           console.error('Error integrating Auth0 user:', err);
         }
       } else {
-        dispatch(clearUser());
+        dispatch(clearAuthorizedUser());
         localStorage.removeItem('authToken');
       }
     };
