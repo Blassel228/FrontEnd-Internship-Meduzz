@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { setFetchedUser } from '../Store/slices/fetchedUserSlice';
 import baseApi from "../Api/baseApi";
-
-interface User {
-  username: string;
-  email: string;
-}
+import {RootState} from "../Store/store";
 
 const UserProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [user, setUser] = useState<User | null>(null);
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.fetchedUser.user);
+
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       setLoading(true);
-      setError('');
+      setError(null);
 
       try {
         const response = await baseApi.get(`/user/${id}`);
-        setUser(response.data);
+        dispatch(setFetchedUser({user: response.data}));
       } catch (err) {
-        console.error('Error fetching user:', err);
         setError('Failed to fetch user data.');
       } finally {
         setLoading(false);
@@ -30,7 +30,7 @@ const UserProfilePage: React.FC = () => {
     };
 
     fetchUser();
-  }, [id]);
+  }, [dispatch, id]);
 
   if (loading) {
     return <div>Loading...</div>;
