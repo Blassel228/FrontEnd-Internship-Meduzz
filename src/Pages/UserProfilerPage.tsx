@@ -21,7 +21,7 @@ const UserProfilePage: React.FC = () => {
 
       try {
         const response = await baseApi.get(`/user/${id}`);
-        dispatch(setFetchedUser({user: response.data}));
+        dispatch(setFetchedUser(response.data));
       } catch (err) {
         setError('Failed to fetch user data.');
       } finally {

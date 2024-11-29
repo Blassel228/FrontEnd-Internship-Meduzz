@@ -1,8 +1,9 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAuthorizedUser } from '../Store/slices/authorizedUserSlice';
+import { removeItem } from '../Utils/localStorage';
 import "./LogoutButton.css";
-import {setAuthorizedUser} from "../Store/slices/authorizedUserSlice";
 
 const LogoutButton: React.FC = () => {
   const { logout, user: auth0User, isAuthenticated: auth0IsAuthenticated } = useAuth0();
@@ -14,8 +15,8 @@ const LogoutButton: React.FC = () => {
     : user?.user?.username;
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    dispatch(setAuthorizedUser({ user: {}}));
+    removeItem('authToken');
+    dispatch(setAuthorizedUser({ user: {} }));
     logout();
   };
 

@@ -12,7 +12,7 @@ const useUserManagement = () => {
     try {
       setLoading(true);
       const response = await baseApi.get(`/user/${id}`);
-      dispatch(setFetchedUser({ user: response.data }));
+      dispatch(setFetchedUser(response.data));
       setError(null);
     } catch (err) {
       setError("Failed to fetch user data.");
@@ -26,7 +26,7 @@ const useUserManagement = () => {
     try {
       setLoading(true);
       const response = await baseApi.put(`/user/${id}`, updatedData);
-      dispatch(setFetchedUser({ user: response.data }));
+      dispatch(setFetchedUser(response.data));
       setError(null);
       return response.data;
     } catch (err) {
