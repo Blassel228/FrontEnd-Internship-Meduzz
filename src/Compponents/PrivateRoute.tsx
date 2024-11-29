@@ -1,5 +1,10 @@
 import React, { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import {getItem} from "../Utils/localStorage";
+
+const checkAuth = (): boolean => {
+  return Boolean(getItem('authToken'));
+};
 
 interface PrivateRouteProps {
   children: ReactNode;
@@ -7,7 +12,7 @@ interface PrivateRouteProps {
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const location = useLocation();
-  const isAuthenticated = Boolean(localStorage.getItem('authToken'));
+  const isAuthenticated = checkAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} />;
