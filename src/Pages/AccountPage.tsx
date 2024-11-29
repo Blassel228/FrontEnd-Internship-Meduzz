@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import baseApi from "../Api/baseApi";
+import {getItem, removeItem} from "../Utils/localStorage";
+import {UserSelfUpdateData} from "../Interfaces/User";
 
 const AccountPage = () => {
   const [username, setName] = useState<string>("");
@@ -7,7 +9,7 @@ const AccountPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const token = localStorage.getItem("authToken");
+  const token = getItem("authToken");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +19,7 @@ const AccountPage = () => {
       return;
     }
 
-    const updatedData = {
+    const updatedData: UserSelfUpdateData = {
       username: username,
       password: password,
     };
@@ -58,7 +60,7 @@ const AccountPage = () => {
         });
 
         alert("Your account has been deleted successfully.");
-        localStorage.removeItem("authToken");
+        removeItem("authToken");
         window.location.href = "/login";
       } catch (error: any) {
         setError(error.response?.data?.detail|| "An error occurred while deleting the profile.");
